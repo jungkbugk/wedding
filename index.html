@@ -7,7 +7,7 @@
     <!-- 카카오톡 공유시 썸네일 -->
     <meta property="og:title" content="김용현 ❤️ 김유경 결혼합니다">
     <meta property="og:description" content="2026년 10월 9일 금요일 오후 2시, 수원 SY컨벤션웨딩홀">
-    <meta property="og:image" content="https://jungkbugk.github.io/wedding/1.jpg">
+    <meta property="og:image" content="https://jungkbugk.github.io/wedding/main.jpg">
     <meta property="og:url" content="https://jungkbugk.github.io/wedding/">
 
     <title>우리 결혼합니다</title>
@@ -74,6 +74,11 @@
         .kakao-share-btn, .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; }
         .kakao-share-btn { background-color: #FEE500; color: #000; }
         .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
+
+        /* 다크모드 환경에서 디데이 타이머 배경색이 튀지 않도록 자동 조절 */
+        @media (prefers-color-scheme: dark) {
+            #timer { background: rgba(216, 27, 96, 0.1) !important; box-shadow: none; }
+        }
 
         @media screen and (min-width: 768px) { 
             body { padding: 40px 0; }
@@ -206,21 +211,21 @@
                 <div class="account-row">
                     <div style="font-size:13px; color:#888;">신부 김유경</div>
                     <div class="bank-info">
-                        <span>새마을금고 9003210456541</span>
+                        <span>새마을금고 9003-2104-5654-1</span>
                         <button class="copy-btn" onclick="copyText('9003210456541')">복사</button>
                     </div>
                 </div>
                 <div class="account-row">
                     <div style="font-size:13px; color:#888;">아버지 김영종</div>
                     <div class="bank-info">
-                        <span>농협 60105956001041</span>
+                        <span>농협 601059-56-001041</span>
                         <button class="copy-btn" onclick="copyText('60105956001041')">복사</button>
                     </div>
                 </div>
                 <div class="account-row">
                     <div style="font-size:13px; color:#888;">어머니 김수미</div>
                     <div class="bank-info">
-                        <span>농협 3560244512813</span>
+                        <span>농협 356-0244-5128-13</span>
                         <button class="copy-btn" onclick="copyText('3560244512813')">복사</button>
                     </div>
                 </div>
@@ -306,7 +311,7 @@
                 content: {
                     title: '김용현 ❤️ 김유경 결혼합니다',
                     description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
-                    imageUrl: 'https://jungkbugk.github.io/wedding/1.jpg',
+                    imageUrl: 'https://jungkbugk.github.io/wedding/main.jpg',
                     link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
                 },
                 buttons: [{
