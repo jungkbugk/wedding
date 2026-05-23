@@ -7,7 +7,7 @@
     <!-- 카카오톡 공유시 보이는 썸네일 및 제목 설정 (Open Graph) -->
     <meta property="og:title" content="김용현 ❤️ 김유경 결혼합니다">
     <meta property="og:description" content="2026년 10월 9일 금요일 오후 2시, 수원 SY웨딩홀">
-    <meta property="og:image" content="1.jpg">
+    <meta property="og:image" content="https://jungkbugk.github.io/wedding/1.jpg">
     <meta property="og:url" content="https://jungkbugk.github.io/wedding/">
 
     <title>우리 결혼합니다</title>
@@ -51,7 +51,7 @@
         /* 갤러리(Swiper) 스타일 */
         .swiper {
             width: 100%;
-            padding-bottom: 40px; /* 아래 점(pagination)을 위한 공간 */
+            padding-bottom: 40px;
         }
         .swiper-slide {
             text-align: center;
@@ -61,11 +61,11 @@
         }
         .swiper-slide img {
             width: 100%;
-            border-radius: 8px; /* 사진 모서리를 살짝 둥글게 */
+            border-radius: 8px; 
             object-fit: cover;
         }
         .swiper-pagination-bullet-active {
-            background-color: #a89f91 !important; /* 활성화된 점 색상 (고급스러운 베이지톤) */
+            background-color: #a89f91 !important; 
         }
 
         /* 계좌번호 박스 */
@@ -89,14 +89,36 @@
         .copy-btn {
             background: #e0e0e0; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 12px;
         }
+
+        /* 카카오톡 공유 버튼 스타일 */
+        .kakao-share-btn {
+            background-color: #FEE500;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Serif KR', serif;
+            margin-top: 40px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
     </style>
 
-    <!-- Swiper CSS 불러오기 -->
+    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- 카카오 공유 API SDK -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" xintegrity="sha384-Tinmxk800x12XrtS3VheD02mOrHFEpG1H1q8vA42K8xQx8A2I5K/E1B6Xq1yU24" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 1. 메인 사진 (GitHub에 올린 main.jpg 파일을 불러옵니다) -->
+        <!-- 1. 메인 사진 (1.jpg) -->
         <img src="1.jpg" alt="웨딩 사진" class="hero-img">
 
         <!-- 2. 초대 인사말 -->
@@ -118,19 +140,14 @@
         <!-- 3. 웨딩 갤러리 -->
         <div class="section">
             <h2>GALLERY</h2>
-            
-            <!-- Swiper 메인 컨테이너 -->
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                    <!-- 슬라이드 사진들 (GitHub에 올린 gallery1.jpg, gallery2.jpg... 파일을 불러옵니다) -->
-                    <!-- 사진을 추가하려면 아래 div를 복사해서 늘려주세요 -->
                     <div class="swiper-slide"><img src="1.jpg" alt="갤러리 사진 1"></div>
                     <div class="swiper-slide"><img src="2.jpg" alt="갤러리 사진 2"></div>
                     <div class="swiper-slide"><img src="3.jpg" alt="갤러리 사진 3"></div>
                     <div class="swiper-slide"><img src="4.jpg" alt="갤러리 사진 4"></div>
                     <div class="swiper-slide"><img src="5.jpg" alt="갤러리 사진 5"></div>
                 </div>
-                <!-- 하단 페이징 (점) -->
                 <div class="swiper-pagination"></div>
             </div>
         </div>
@@ -143,7 +160,6 @@
             <p style="font-size: 18px; font-weight: 600; color: #333;">수원 SY웨딩홀</p>
             <p>경기도 수원시 (상세 주소 입력 필요)</p>
             
-            <!-- 카카오맵 지도가 들어갈 자리 -->
             <div id="map" style="width:100%;height:250px;margin-top:20px;border-radius:8px;background-color:#eee;display:flex;align-items:center;justify-content:center;font-size:14px;color:#888;text-align:center;">
                 지도를 불러오고 있습니다...<br>(카카오 앱키 설정 필요)
             </div>
@@ -155,10 +171,8 @@
         <div class="section">
             <h2>마음 전하실 곳</h2>
             
-            <!-- 신랑 측 계좌 -->
             <div class="account-box" style="margin-top: 15px;">
                 <div style="font-weight: 600; margin-bottom: 15px; color:#4a4a4a;">[신랑 측]</div>
-                
                 <div class="account-row">
                     <div style="font-size:13px; color:#666; margin-bottom:3px;">신랑 김용현</div>
                     <div class="bank-info">
@@ -166,8 +180,6 @@
                         <button class="copy-btn" onclick="copyText('74180200265034')">복사</button>
                     </div>
                 </div>
-                
-                <!-- 신랑 부모님 계좌 (내용 수정 필요) -->
                 <div class="account-row">
                     <div style="font-size:13px; color:#666; margin-bottom:3px;">아버지 OOO</div>
                     <div class="bank-info">
@@ -175,7 +187,6 @@
                         <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
                     </div>
                 </div>
-                
                 <div class="account-row">
                     <div style="font-size:13px; color:#666; margin-bottom:3px;">어머니 OOO</div>
                     <div class="bank-info">
@@ -185,10 +196,8 @@
                 </div>
             </div>
 
-            <!-- 신부 측 계좌 -->
             <div class="account-box">
                 <div style="font-weight: 600; margin-bottom: 15px; color:#4a4a4a;">[신부 측]</div>
-                
                 <div class="account-row">
                     <div style="font-size:13px; color:#666; margin-bottom:3px;">신부 김유경</div>
                     <div class="bank-info">
@@ -196,8 +205,6 @@
                         <button class="copy-btn" onclick="copyText('9003210456541')">복사</button>
                     </div>
                 </div>
-
-                <!-- 신부 부모님 계좌 (내용 수정 필요) -->
                 <div class="account-row">
                     <div style="font-size:13px; color:#666; margin-bottom:3px;">아버지 OOO</div>
                     <div class="bank-info">
@@ -205,7 +212,6 @@
                         <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
                     </div>
                 </div>
-                
                 <div class="account-row">
                     <div style="font-size:13px; color:#666; margin-bottom:3px;">어머니 OOO</div>
                     <div class="bank-info">
@@ -214,56 +220,28 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 카카오톡 공유 버튼 -->
+            <button class="kakao-share-btn" onclick="shareKakao()">
+                <!-- 카카오 말풍선 아이콘 -->
+                <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
+                    <path d="M9 2C4.02944 2 0 5.24264 0 9.25C0 11.8392 1.63777 14.1166 4.10389 15.3571C3.89613 16.0354 3.19515 18.0163 3.16104 18.1368C3.12693 18.2573 3.25055 18.2721 3.32839 18.2163C3.40623 18.1604 5.92211 16.4866 6.84073 15.8679C7.53427 16.0356 8.25624 16.125 9 16.125C13.9706 16.125 18 12.8824 18 8.875C18 4.86764 13.9706 2 9 2Z" fill="#000000"/>
+                </svg>
+                카카오톡으로 공유하기
+            </button>
+
         </div>
     </div>
 
-    <!-- Swiper JS 불러오기 -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></script>
+    <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-    <!-- 스크립트 실행 -->
-    <!-- 카카오맵 API (본인의 앱키로 변경 필수) -->
+    <!-- 카카오맵 API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_발급받은_카카오_자바스크립트_키를_넣으세요"></script>
 
     <script>
-        // 갤러리 슬라이더 설정
+        // --- 1. 갤러리 슬라이더 설정 ---
         var swiper = new Swiper(".mySwiper", {
-            spaceBetween: 10, // 사진과 사진 사이 간격
+            spaceBetween: 10,
             pagination: {
                 el: ".swiper-pagination",
-                clickable: true, // 점을 눌러서 이동 가능하게
-            },
-        });
-
-        // 계좌번호 복사 기능
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                alert('계좌번호가 복사되었습니다.');
-            }, function(err) {
-                alert('복사에 실패했습니다. 직접 선택해서 복사해주세요.');
-            });
-        }
-
-        // 카카오맵 렌더링 설정
-        window.onload = function() {
-            if (typeof kakao !== 'undefined' && kakao.maps) {
-                var mapContainer = document.getElementById('map'); 
-                var mapOption = { 
-                    // SY웨딩홀의 대략적인 임시 좌표입니다. 구글 맵 등에서 정확한 위도/경도를 찾아 변경해주세요.
-                    center: new kakao.maps.LatLng(37.2635727, 127.0286009), 
-                    level: 3 // 지도의 확대 레벨
-                };
-
-                // 지도 생성
-                var map = new kakao.maps.Map(mapContainer, mapOption); 
-                var markerPosition  = new kakao.maps.LatLng(37.2635727, 127.0286009); 
-                var marker = new kakao.maps.Marker({ position: markerPosition });
-                marker.setMap(map);
-                
-                // 지도 내부의 안내 문구(로딩 텍스트) 제거
-                mapContainer.innerHTML = ''; 
-            }
-        };
-    </script>
-</body>
-</html>
+                clickable: true,
