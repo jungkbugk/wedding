@@ -302,8 +302,8 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <!-- 카카오맵 API (키 적용 완료) -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d3c14ef170ac706a80006fa4c81c02bd"></script>
+    <!-- 카카오맵 API (https:// 강제 적용 완료) -->
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d3c14ef170ac706a80006fa4c81c02bd"></script>
 
     <script>
         // --- 1. 갤러리 슬라이더 설정 ---
@@ -326,17 +326,23 @@
 
         // --- 3. 카카오맵 렌더링 ---
         window.onload = function() {
-            if (typeof kakao !== 'undefined' && kakao.maps) {
-                var mapContainer = document.getElementById('map'); 
-                var mapOption = { 
-                    center: new kakao.maps.LatLng(37.2544769, 127.0750343), 
-                    level: 3 
-                };
-                var map = new kakao.maps.Map(mapContainer, mapOption); 
-                var markerPosition  = new kakao.maps.LatLng(37.2544769, 127.0750343); 
-                var marker = new kakao.maps.Marker({ position: markerPosition });
-                marker.setMap(map);
-                mapContainer.innerHTML = ''; 
+            try {
+                if (typeof kakao !== 'undefined' && kakao.maps) {
+                    var mapContainer = document.getElementById('map'); 
+                    var mapOption = { 
+                        center: new kakao.maps.LatLng(37.2544769, 127.0750343), 
+                        level: 3 
+                    };
+                    var map = new kakao.maps.Map(mapContainer, mapOption); 
+                    var markerPosition  = new kakao.maps.LatLng(37.2544769, 127.0750343); 
+                    var marker = new kakao.maps.Marker({ position: markerPosition });
+                    marker.setMap(map);
+                    mapContainer.innerHTML = ''; 
+                } else {
+                    document.getElementById('map').innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스에서 사이트 도메인 등록을 확인해주세요.';
+                }
+            } catch (error) {
+                document.getElementById('map').innerHTML = '지도 에러: ' + error.message;
             }
         };
 
