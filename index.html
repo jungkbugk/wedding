@@ -341,28 +341,37 @@
         }
 
         function shareKakao() {
-            Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '김용현 ❤️ 김유경 결혼합니다',
-                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
-                    // 카카오톡에 보일 메인 사진 링크 (절대 주소여야 합니다)
-                    imageUrl: 'https://jungkbugk.github.io/wedding/1.jpg',
-                    link: {
-                        mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
-                        webUrl: 'https://jungkbugk.github.io/wedding/',
-                    },
-                },
-                buttons: [
-                    {
-                        title: '모바일 청첩장 보기',
+            try {
+                if (!Kakao.isInitialized()) {
+                    alert("카카오 초기화에 실패했습니다. 자바스크립트 키를 다시 확인해주세요.");
+                    return;
+                }
+                Kakao.Share.sendDefault({
+                    objectType: 'feed',
+                    content: {
+                        title: '김용현 ❤️ 김유경 결혼합니다',
+                        description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
+                        // 🔴 테스트: 만약 사진 용량이 문제인지 확인하기 위해 임시로 카카오 기본 이미지로 변경했습니다.
+                        imageUrl: 'https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png',
                         link: {
                             mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
                             webUrl: 'https://jungkbugk.github.io/wedding/',
                         },
                     },
-                ],
-            });
+                    buttons: [
+                        {
+                            title: '모바일 청첩장 보기',
+                            link: {
+                                mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
+                                webUrl: 'https://jungkbugk.github.io/wedding/',
+                            },
+                        },
+                    ],
+                });
+            } catch (error) {
+                // 에러가 있다면 화면에 팝업으로 띄워서 보여줍니다.
+                alert("공유하기 에러 발생: " + error.message);
+            }
         }
     </script>
 </body>
