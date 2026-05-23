@@ -174,23 +174,25 @@
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
-    <!-- Swiper JS (누락되었던 갤러리 동작 스크립트 복구) -->
+    <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <!-- 카카오 공유 API SDK (보안 충돌 방지를 위해 무결성 속성 제거) -->
+    <!-- 카카오 공유 API SDK -->
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
     
-    <!-- 카카오맵 API (에러 방지용 https 강제 적용) -->
+    <!-- 카카오맵 API -->
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
 
     <script>
-        // --- 1. 갤러리 슬라이더 설정 ---
-        var swiper = new Swiper(".mySwiper", {
-            spaceBetween: 10,
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
+        // --- 1. 갤러리 슬라이더 설정 (HTML 요소가 다 로드된 후 실행하도록 보호) ---
+        document.addEventListener("DOMContentLoaded", function() {
+            var swiper = new Swiper(".mySwiper", {
+                spaceBetween: 10,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+            });
         });
 
         // --- 2. 계좌번호 복사 기능 ---
@@ -235,13 +237,11 @@
 
         // --- 4. 카카오톡 공유 기능 (에러 원인 추적 코드 적용) ---
         function shareKakao() {
-            // 1. 카카오 스크립트 자체가 다운로드되지 않은 경우
             if (typeof Kakao === 'undefined') {
                 alert('카카오 스크립트가 차단되었습니다.\n브라우저의 광고 차단기(AdBlock)를 끄거나, 크롬/사파리 등 일반 브라우저로 접속해주세요.');
                 return;
             }
 
-            // 2. 초기화가 안 되어 있다면 버튼을 누를 때 강제로 초기화 시도
             if (!Kakao.isInitialized()) {
                 try {
                     Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); 
@@ -251,7 +251,6 @@
                 }
             }
 
-            // 3. 정상적으로 초기화되면 공유 창 띄우기
             Kakao.Share.sendDefault({
                 objectType: 'feed',
                 content: {
