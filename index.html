@@ -157,10 +157,11 @@
         <!-- 4. 오시는 길 -->
         <div class="section">
             <h2>오시는 길</h2>
-            <p style="font-size: 18px; font-weight: 600; color: #333;">수원 SY웨딩홀</p>
-            <p>경기도 수원시 (상세 주소 입력 필요)</p>
+            <p style="font-size: 18px; font-weight: 600; color: #333;">수원 SY컨벤션웨딩홀</p>
+            <p>경기 수원시 영통구 봉영로 1612</p>
             
             <div id="map" style="width:100%;height:250px;margin-top:20px;border-radius:8px;background-color:#eee;display:flex;align-items:center;justify-content:center;font-size:14px;color:#888;text-align:center;">
+                지도를 불러오고 있습니다...<br>(카카오 앱키 설정 필요)
             </div>
         </div>
 
@@ -262,19 +263,19 @@
             if (typeof kakao !== 'undefined' && kakao.maps) {
                 var mapContainer = document.getElementById('map'); 
                 var mapOption = { 
-                    center: new kakao.maps.LatLng(37.2635727, 127.0286009), 
+                    center: new kakao.maps.LatLng(37.2544769, 127.0750343), 
                     level: 3 
                 };
                 var map = new kakao.maps.Map(mapContainer, mapOption); 
-                var markerPosition  = new kakao.maps.LatLng(37.2635727, 127.0286009); 
+                var markerPosition  = new kakao.maps.LatLng(37.2544769, 127.0750343); 
                 var marker = new kakao.maps.Marker({ position: markerPosition });
                 marker.setMap(map);
-            } else {
-                document.getElementById('map').innerHTML = '지도를 불러오지 못했습니다.';
+                mapContainer.innerHTML = ''; 
             }
         };
 
-        // --- 4. 카카오톡 공유 기능 (키 적용 완료) ---
+        // --- 4. 카카오톡 공유 기능 ---
+        // (주의) 아래 항목에 본인의 자바스크립트 키를 반드시 입력하세요!
         if (!Kakao.isInitialized()) {
             Kakao.init('d3c14ef170ac706a80006fa4c81c02bd'); 
         }
@@ -284,7 +285,8 @@
                 objectType: 'feed',
                 content: {
                     title: '김용현 ❤️ 김유경 결혼합니다',
-                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY웨딩홀',
+                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
+                    // 카카오톡에 보일 메인 사진 링크 (절대 주소여야 합니다)
                     imageUrl: 'https://jungkbugk.github.io/wedding/1.jpg',
                     link: {
                         mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
