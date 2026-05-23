@@ -51,6 +51,29 @@
         .date { font-size: 16px; color: #999; margin-bottom: 30px; letter-spacing: 1px; }
         p { line-height: 2.0; font-size: 15px; color: #555; }
         
+        /* 달력 & 타이머 스타일 */
+        .calendar-section { padding: 40px 20px; background-color: #fcfbf9; }
+        .calendar-wrap { margin-bottom: 35px; }
+        .calendar-header { font-size: 18px; font-weight: 600; color: #555; margin-bottom: 20px; letter-spacing: 2px; }
+        .calendar { width: 100%; border-collapse: collapse; margin: 0 auto; max-width: 320px; }
+        .calendar th { padding: 10px 0; font-size: 13px; font-weight: 400; color: #999; text-align: center; }
+        .calendar td { padding: 12px 0; font-size: 15px; color: #555; text-align: center; }
+        .calendar th.sun, .calendar td.sun { color: #d9534f; }
+        .calendar th.sat { color: #888; }
+        .d-day-mark {
+            display: flex; justify-content: center; align-items: center;
+            width: 32px; height: 32px; background-color: #dfc6c5; color: #fff;
+            border-radius: 50%; margin: 0 auto; font-weight: 600;
+        }
+        
+        .countdown-wrap { margin-top: 20px; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .countdown-boxes { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
+        .time-box { display: flex; flex-direction: column; align-items: center; width: 50px; }
+        .time-box span { font-size: 24px; font-weight: 600; color: #4a4a4a; }
+        .time-box small { font-size: 11px; color: #aaa; margin-top: 5px; letter-spacing: 1px; }
+        .countdown-footer { font-size: 15px; color: #666; margin: 0; }
+        .countdown-footer span { color: #dfc6c5; font-weight: 600; font-size: 17px; }
+
         /* 갤러리(Swiper) 스타일 - 높이 고정 및 중앙 정렬 */
         .swiper {
             width: 100%;
@@ -61,15 +84,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 450px; /* 모든 사진의 높이를 동일하게 고정 */
-            background-color: #f5f5f5; /* 여백 부분의 은은한 배경색 */
+            height: 450px;
+            background-color: #f5f5f5;
             border-radius: 8px;
             overflow: hidden;
         }
         .swiper-slide img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* 사진이 잘리지 않고 가운데에 맞춰짐 */
+            object-fit: contain; 
         }
         .swiper-pagination-bullet-active {
             background-color: #a89f91 !important; 
@@ -152,19 +175,16 @@
         /* 💻 PC 환경 화면 넓히기 */
         @media screen and (min-width: 768px) {
             body { padding: 40px 0; }
-            .container {
-                max-width: 700px; 
-                border-radius: 20px; 
-            }
+            .container { max-width: 700px; border-radius: 20px; }
             .section { padding: 70px 50px; }
             h1 { font-size: 30px; }
             h2 { font-size: 22px; }
             .date { font-size: 18px; }
             p { font-size: 17px; }
-            
+            .calendar { max-width: 400px; }
+            .calendar th, .calendar td { font-size: 16px; }
             .swiper-slide { height: 600px; }
             .map-container { height: 350px; }
-
             .account-box { font-size: 16px; }
             .account-row .bank-info span { font-size: 15px; }
             .copy-btn { font-size: 14px; padding: 8px 14px; }
@@ -182,108 +202,6 @@
     
     <!-- 카카오맵 API -->
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
-
-    <script>
-        // --- 1. 갤러리 슬라이더 설정 (HTML 요소가 다 로드된 후 실행하도록 보호) ---
-        document.addEventListener("DOMContentLoaded", function() {
-            var swiper = new Swiper(".mySwiper", {
-                spaceBetween: 10,
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
-                },
-            });
-        });
-
-        // --- 2. 계좌번호 복사 기능 ---
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                alert('계좌번호가 복사되었습니다.');
-            }, function(err) {
-                alert('복사에 실패했습니다. 직접 선택해서 복사해주세요.');
-            });
-        }
-
-        // --- 3. 카카오맵 렌더링 (안전 코드 적용) ---
-        window.onload = function() {
-            var mapContainer = document.getElementById('map'); 
-            try {
-                if (typeof kakao !== 'undefined' && kakao.maps) {
-                    var mapOption = { 
-                        center: new kakao.maps.LatLng(37.2544769, 127.0750343), 
-                        level: 3 
-                    };
-                    var map = new kakao.maps.Map(mapContainer, mapOption); 
-                    var markerPosition  = new kakao.maps.LatLng(37.2544769, 127.0750343); 
-                    var marker = new kakao.maps.Marker({ position: markerPosition });
-                    marker.setMap(map);
-                    
-                    // 기존에 있던 로딩 텍스트 삭제
-                    var child = mapContainer.firstChild;
-                    while (child) {
-                        if (child.nodeType === 3) {
-                            mapContainer.removeChild(child);
-                            break;
-                        }
-                        child = child.nextSibling;
-                    }
-                } else {
-                    mapContainer.innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스에서 사이트 도메인 등록을 확인해주세요.';
-                }
-            } catch(e) {
-                mapContainer.innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스에서 사이트 도메인 등록을 확인해주세요.';
-            }
-        };
-
-        // --- 4. 카카오톡 공유 기능 (에러 원인 추적 코드 적용) ---
-        function shareKakao() {
-            if (typeof Kakao === 'undefined') {
-                alert('카카오 스크립트가 차단되었습니다.\n브라우저의 광고 차단기(AdBlock)를 끄거나, 크롬/사파리 등 일반 브라우저로 접속해주세요.');
-                return;
-            }
-
-            if (!Kakao.isInitialized()) {
-                try {
-                    Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); 
-                } catch(e) {
-                    alert('카카오 초기화 실패 원인: ' + e.message);
-                    return;
-                }
-            }
-
-            Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '김용현 ❤️ 김유경 결혼합니다',
-                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
-                    imageUrl: 'https://jungkbugk.github.io/wedding/1.jpg',
-                    link: {
-                        mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
-                        webUrl: 'https://jungkbugk.github.io/wedding/',
-                    },
-                },
-                buttons: [
-                    {
-                        title: '모바일 청첩장 보기',
-                        link: {
-                            mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
-                            webUrl: 'https://jungkbugk.github.io/wedding/',
-                        },
-                    },
-                ],
-            });
-        }
-
-        // --- 5. 링크 복사 기능 ---
-        function copyLink() {
-            var url = 'https://jungkbugk.github.io/wedding/';
-            navigator.clipboard.writeText(url).then(function() {
-                alert('청첩장 링크가 복사되었습니다.\n원하는 곳에 붙여넣기 해주세요!');
-            }, function(err) {
-                alert('복사에 실패했습니다. 인터넷 창 상단의 주소를 직접 복사해주세요.');
-            });
-        }
-    </script>
 </head>
 <body>
     <div class="container">
@@ -302,6 +220,39 @@
                 지켜나갈 수 있도록 앞날을<br>
                 축복해 주시면 감사하겠습니다.
             </p>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
+
+        <!-- 2-1. 달력 & 타이머 -->
+        <div class="section calendar-section">
+            <div class="calendar-wrap">
+                <div class="calendar-header">2026. 10</div>
+                <table class="calendar">
+                    <thead>
+                        <tr>
+                            <th class="sun">일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th class="sat">토</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td class="sat">3</td></tr>
+                        <tr><td class="sun">4</td><td>5</td><td>6</td><td>7</td><td>8</td><td><div class="d-day-mark">9</div></td><td class="sat">10</td></tr>
+                        <tr><td class="sun">11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td class="sat">17</td></tr>
+                        <tr><td class="sun">18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td class="sat">24</td></tr>
+                        <tr><td class="sun">25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td class="sat">31</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="countdown-wrap">
+                <div class="countdown-boxes">
+                    <div class="time-box"><span id="days">00</span><small>DAYS</small></div>
+                    <div class="time-box"><span id="hours">00</span><small>HOUR</small></div>
+                    <div class="time-box"><span id="mins">00</span><small>MIN</small></div>
+                    <div class="time-box"><span id="secs">00</span><small>SEC</small></div>
+                </div>
+                <p class="countdown-footer">용현 ❤️ 유경의 결혼식이 <br><span><span id="text-days">0</span>일</span> 남았습니다.</p>
+            </div>
         </div>
 
         <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
@@ -409,5 +360,123 @@
 
         </div>
     </div>
+
+    <script>
+        // --- 0. 디데이 타이머 설정 (아이폰 Safari 오류 해결 적용) ---
+        document.addEventListener("DOMContentLoaded", function() {
+            // 아이폰에서 오류가 나는 '-' 대신 '/'를 사용하여 날짜 객체 생성
+            const dDay = new Date("2026/10/09 14:00:00").getTime();
+            
+            const timer = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = dDay - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById("days").innerText = "00";
+                    document.getElementById("hours").innerText = "00";
+                    document.getElementById("mins").innerText = "00";
+                    document.getElementById("secs").innerText = "00";
+                    document.getElementById("text-days").innerText = "0";
+                    return;
+                }
+
+                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = String(d).padStart(2, '0');
+                document.getElementById("hours").innerText = String(h).padStart(2, '0');
+                document.getElementById("mins").innerText = String(m).padStart(2, '0');
+                document.getElementById("secs").innerText = String(s).padStart(2, '0');
+                document.getElementById("text-days").innerText = d;
+            }, 1000);
+        });
+
+        // --- 1. 갤러리 슬라이더 설정 ---
+        document.addEventListener("DOMContentLoaded", function() {
+            var swiper = new Swiper(".mySwiper", {
+                spaceBetween: 10,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+            });
+        });
+
+        // --- 2. 계좌번호 복사 기능 ---
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('계좌번호가 복사되었습니다.');
+            }, function(err) {
+                alert('복사에 실패했습니다. 직접 선택해서 복사해주세요.');
+            });
+        }
+
+        // --- 3. 카카오맵 렌더링 ---
+        window.onload = function() {
+            var mapContainer = document.getElementById('map'); 
+            try {
+                if (typeof kakao !== 'undefined' && kakao.maps) {
+                    var mapOption = { 
+                        center: new kakao.maps.LatLng(37.2544769, 127.0750343), 
+                        level: 3 
+                    };
+                    var map = new kakao.maps.Map(mapContainer, mapOption); 
+                    var markerPosition  = new kakao.maps.LatLng(37.2544769, 127.0750343); 
+                    var marker = new kakao.maps.Marker({ position: markerPosition });
+                    marker.setMap(map);
+                    
+                    var child = mapContainer.firstChild;
+                    while (child) {
+                        if (child.nodeType === 3) { mapContainer.removeChild(child); break; }
+                        child = child.nextSibling;
+                    }
+                } else {
+                    mapContainer.innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스 설정 확인';
+                }
+            } catch(e) {
+                mapContainer.innerHTML = '카카오맵 로드 실패';
+            }
+        };
+
+        // --- 4. 카카오톡 공유 기능 ---
+        function shareKakao() {
+            if (typeof Kakao === 'undefined') {
+                alert('카카오 스크립트가 차단되었습니다.\n일반 브라우저로 접속해주세요.');
+                return;
+            }
+            if (!Kakao.isInitialized()) {
+                try {
+                    Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); 
+                } catch(e) {
+                    alert('카카오 초기화 실패: ' + e.message); return;
+                }
+            }
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '김용현 ❤️ 김유경 결혼합니다',
+                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
+                    imageUrl: 'https://jungkbugk.github.io/wedding/1.jpg',
+                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' },
+                },
+                buttons: [
+                    { title: '모바일 청첩장 보기', link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' } },
+                ],
+            });
+        }
+
+        // --- 5. 링크 복사 기능 ---
+        function copyLink() {
+            var url = 'https://jungkbugk.github.io/wedding/';
+            navigator.clipboard.writeText(url).then(function() {
+                alert('청첩장 링크가 복사되었습니다.\n원하는 곳에 붙여넣기 해주세요!');
+            }, function(err) {
+                alert('복사에 실패했습니다. 인터넷 창 상단의 주소를 직접 복사해주세요.');
+            });
+        }
+    </script>
 </body>
 </html>
