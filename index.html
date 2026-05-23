@@ -51,7 +51,7 @@
         .date { font-size: 16px; color: #999; margin-bottom: 30px; letter-spacing: 1px; }
         p { line-height: 2.0; font-size: 15px; color: #555; }
         
-        /* 갤러리(Swiper) 스타일 */
+        /* 갤러리(Swiper) 스타일 - 높이 고정 및 중앙 정렬 */
         .swiper {
             width: 100%;
             padding-bottom: 40px;
@@ -61,15 +61,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 450px; /* 모든 사진의 틀 높이를 일정하게 고정 */
-            background-color: #f9f9f9; /* 여백이 생길 경우를 대비한 은은한 배경색 */
+            height: 450px; /* 모든 사진의 높이를 동일하게 고정 */
+            background-color: #f5f5f5; /* 여백 부분의 은은한 배경색 */
             border-radius: 8px;
+            overflow: hidden;
         }
         .swiper-slide img {
             width: 100%;
             height: 100%;
-            border-radius: 8px; 
-            object-fit: contain; /* 사진이 잘리지 않고 항상 가운데에 오도록 설정 */
+            object-fit: contain; /* 사진이 잘리지 않고 가운데에 맞춰짐 */
         }
         .swiper-pagination-bullet-active {
             background-color: #a89f91 !important; 
@@ -130,49 +130,25 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* 💻 PC 환경 화면 넓히기 (화면 폭이 768px 이상일 때 자동 적용) */
+        /* 💻 PC 환경 화면 넓히기 */
         @media screen and (min-width: 768px) {
-            body {
-                padding: 40px 0; /* 위아래 여백 살짝 */
-            }
+            body { padding: 40px 0; }
             .container {
-                max-width: 700px; /* PC에서는 최대 폭 700px로 확장 */
-                border-radius: 20px; /* 모서리를 둥글게 해서 예쁘게 */
+                max-width: 700px; 
+                border-radius: 20px; 
             }
-            .section {
-                padding: 70px 50px; /* 여백도 시원하게 넓힘 */
-            }
+            .section { padding: 70px 50px; }
             h1 { font-size: 30px; }
             h2 { font-size: 22px; }
             .date { font-size: 18px; }
             p { font-size: 17px; }
             
-            /* PC에서 갤러리 이미지가 너무 무식하게 커지지 않게 제어 */
-            .swiper-slide {
-                height: 600px; /* PC 환경에서는 갤러리 틀을 더 높게 설정 */
-            }
-            .swiper-slide img {
-                width: 100%; 
-                height: 100%;
-                object-fit: contain; 
-            }
+            .swiper-slide { height: 600px; }
+            .map-container { height: 350px; }
 
-            /* PC에서 지도 높이도 넓게 */
-            .map-container {
-                height: 350px; 
-            }
-
-            /* PC에서 계좌번호 박스 폰트 크기 키움 */
-            .account-box {
-                font-size: 16px;
-            }
-            .account-row .bank-info span {
-                font-size: 15px;
-            }
-            .copy-btn {
-                font-size: 14px;
-                padding: 8px 14px;
-            }
+            .account-box { font-size: 16px; }
+            .account-row .bank-info span { font-size: 15px; }
+            .copy-btn { font-size: 14px; padding: 8px 14px; }
         }
     </style>
 
@@ -289,7 +265,6 @@
 
             <!-- 카카오톡 공유 버튼 -->
             <button class="kakao-share-btn" onclick="shareKakao()">
-                <!-- 카카오 말풍선 아이콘 -->
                 <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
                     <path d="M9 2C4.02944 2 0 5.24264 0 9.25C0 11.8392 1.63777 14.1166 4.10389 15.3571C3.89613 16.0354 3.19515 18.0163 3.16104 18.1368C3.12693 18.2573 3.25055 18.2721 3.32839 18.2163C3.40623 18.1604 5.92211 16.4866 6.84073 15.8679C7.53427 16.0356 8.25624 16.125 9 16.125C13.9706 16.125 18 12.8824 18 8.875C18 4.86764 13.9706 2 9 2Z" fill="#000000"/>
                 </svg>
@@ -302,8 +277,8 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <!-- 카카오맵 API (https:// 강제 적용 완료) -->
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d3c14ef170ac706a80006fa4c81c02bd"></script>
+    <!-- 카카오맵 API (에러 방지용 https 강제 적용) -->
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
 
     <script>
         // --- 1. 갤러리 슬라이더 설정 ---
@@ -324,11 +299,11 @@
             });
         }
 
-        // --- 3. 카카오맵 렌더링 ---
+        // --- 3. 카카오맵 렌더링 (안전 코드 적용) ---
         window.onload = function() {
+            var mapContainer = document.getElementById('map'); 
             try {
                 if (typeof kakao !== 'undefined' && kakao.maps) {
-                    var mapContainer = document.getElementById('map'); 
                     var mapOption = { 
                         center: new kakao.maps.LatLng(37.2544769, 127.0750343), 
                         level: 3 
@@ -337,55 +312,63 @@
                     var markerPosition  = new kakao.maps.LatLng(37.2544769, 127.0750343); 
                     var marker = new kakao.maps.Marker({ position: markerPosition });
                     marker.setMap(map);
-                    mapContainer.innerHTML = ''; 
+                    
+                    // 기존에 있던 로딩 텍스트 삭제
+                    var child = mapContainer.firstChild;
+                    while (child) {
+                        if (child.nodeType === 3) {
+                            mapContainer.removeChild(child);
+                            break;
+                        }
+                        child = child.nextSibling;
+                    }
                 } else {
-                    document.getElementById('map').innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스에서 사이트 도메인 등록을 확인해주세요.';
+                    mapContainer.innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스에서 사이트 도메인 등록을 확인해주세요.';
                 }
-            } catch (error) {
-                document.getElementById('map').innerHTML = '지도 에러: ' + error.message;
+            } catch(e) {
+                mapContainer.innerHTML = '카카오맵 로드 실패<br>카카오 디벨로퍼스에서 사이트 도메인 등록을 확인해주세요.';
             }
         };
 
-        // --- 4. 카카오톡 공유 기능 ---
-        function shareKakao() {
-            try {
-                // 1. 카카오 스크립트가 로드되지 않았을 때의 안전장치
-                if (typeof Kakao === 'undefined') {
-                    alert("카카오 기능을 불러오지 못했습니다.\n광고 차단 앱(애드블록)이나 시크릿 모드를 끄고 새로고침 해주세요.");
-                    return;
-                }
-                
-                // 2. 카카오 초기화가 안 되어 있다면 여기서 진행
+        // --- 4. 카카오톡 공유 기능 (에러 방지 적용) ---
+        try {
+            if (typeof Kakao !== 'undefined') {
                 if (!Kakao.isInitialized()) {
-                    Kakao.init('d3c14ef170ac706a80006fa4c81c02bd'); 
+                    Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); 
                 }
+            }
+        } catch(e) {
+            console.error("Kakao SDK Initialization Failed", e);
+        }
 
-                Kakao.Share.sendDefault({
-                    objectType: 'feed',
-                    content: {
-                        title: '김용현 ❤️ 김유경 결혼합니다',
-                        description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
-                        // 🔴 테스트: 만약 사진 용량이 문제인지 확인하기 위해 임시로 카카오 기본 이미지로 변경했습니다.
-                        imageUrl: 'https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png',
+        function shareKakao() {
+            // 카카오 기능이 완전히 막혀있을 때의 안내
+            if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
+                alert('카카오 공유 기능을 불러올 수 없습니다.\n스마트폰 기본 브라우저(크롬, 사파리 등)에서 열어주거나 도메인 등록을 확인해주세요.');
+                return;
+            }
+
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '김용현 ❤️ 김유경 결혼합니다',
+                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
+                    imageUrl: 'https://jungkbugk.github.io/wedding/1.jpg',
+                    link: {
+                        mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
+                        webUrl: 'https://jungkbugk.github.io/wedding/',
+                    },
+                },
+                buttons: [
+                    {
+                        title: '모바일 청첩장 보기',
                         link: {
                             mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
                             webUrl: 'https://jungkbugk.github.io/wedding/',
                         },
                     },
-                    buttons: [
-                        {
-                            title: '모바일 청첩장 보기',
-                            link: {
-                                mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
-                                webUrl: 'https://jungkbugk.github.io/wedding/',
-                            },
-                        },
-                    ],
-                });
-            } catch (error) {
-                // 에러가 있다면 화면에 팝업으로 띄워서 보여줍니다.
-                alert("공유하기 에러 발생: " + error.message);
-            }
+                ],
+            });
         }
     </script>
 </body>
