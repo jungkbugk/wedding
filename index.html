@@ -6,8 +6,8 @@
     
     <!-- 카카오톡 공유시 보이는 썸네일 및 제목 설정 (Open Graph) -->
     <meta property="og:title" content="김용현 ❤️ 김유경 결혼합니다">
-    <meta property="og:description" content="2026년 1O월 9일 금요일 오후 2시, SY웨딩홀">
-    <meta property="og:image" content="썸네일_이미지_URL(ex: https://...)">
+    <meta property="og:description" content="2026년 10월 9일 금요일 오후 2시, 수원 SY웨딩홀">
+    <meta property="og:image" content="썸네일_이미지_URL">
     <meta property="og:url" content="이_청첩장의_최종_링크">
 
     <title>우리 결혼합니다</title>
@@ -32,6 +32,7 @@
             background: #fff;
             box-shadow: 0 0 15px rgba(0,0,0,0.05);
             min-height: 100vh;
+            padding-bottom: 50px;
         }
         /* 메인 사진 영역 */
         .hero-img {
@@ -43,10 +44,30 @@
             padding: 50px 20px;
         }
         h1 { font-size: 24px; font-weight: 600; margin-bottom: 10px; color: #4a4a4a; }
-        h2 { font-size: 18px; font-weight: 600; color: #888; margin-bottom: 20px; }
+        h2 { font-size: 18px; font-weight: 600; color: #888; margin-bottom: 20px; letter-spacing: 2px;}
         .date { font-size: 16px; color: #999; margin-bottom: 30px; letter-spacing: 1px; }
         p { line-height: 2.0; font-size: 15px; color: #555; }
         
+        /* 갤러리(Swiper) 스타일 */
+        .swiper {
+            width: 100%;
+            padding-bottom: 40px; /* 아래 점(pagination)을 위한 공간 */
+        }
+        .swiper-slide {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-slide img {
+            width: 100%;
+            border-radius: 8px; /* 사진 모서리를 살짝 둥글게 */
+            object-fit: cover;
+        }
+        .swiper-pagination-bullet-active {
+            background-color: #a89f91 !important; /* 활성화된 점 색상 (고급스러운 베이지톤) */
+        }
+
         /* 계좌번호 박스 */
         .account-box {
             background: #f9f9f9;
@@ -69,16 +90,19 @@
             background: #e0e0e0; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 12px;
         }
     </style>
+
+    <!-- Swiper CSS 불러오기 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
     <div class="container">
-        <!-- 1. 메인 사진 -->
-        <img src="여기에_메인_웨딩사진_주소를_넣으세요.jpg" alt="웨딩 사진" class="hero-img">
+        <!-- 1. 메인 사진 (GitHub에 올린 main.jpg 파일을 불러옵니다) -->
+        <img src="main.jpg" alt="웨딩 사진" class="hero-img">
 
         <!-- 2. 초대 인사말 -->
         <div class="section">
             <h1>김용현 & 김유경</h1>
-            <div class="date">2026년 1O월 9일 금요일 오후 2시</div>
+            <div class="date">2026년 10월 9일 금요일 오후 2시</div>
             <p>
                 서로가 마주보며 다져온 사랑을<br>
                 이제 함께 한 곳을 바라보며 걸어갈 수 있는<br>
@@ -91,39 +115,127 @@
 
         <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
 
-        <!-- 3. 오시는 길 -->
+        <!-- 3. 웨딩 갤러리 -->
         <div class="section">
-            <h2>오시는 길</h2>
-            <p style="font-size: 18px; font-weight: 600; color: #333;">SY 웨딩홀 9층</p>
-            <p>경기도 수원시 봉영로 1612</p>
+            <h2>GALLERY</h2>
+            
+            <!-- Swiper 메인 컨테이너 -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <!-- 슬라이드 사진들 (GitHub에 올린 gallery1.jpg, gallery2.jpg... 파일을 불러옵니다) -->
+                    <!-- 사진을 추가하려면 아래 div를 복사해서 늘려주세요 -->
+                    <div class="swiper-slide"><img src="gallery1.jpg" alt="갤러리 사진 1"></div>
+                    <div class="swiper-slide"><img src="gallery2.jpg" alt="갤러리 사진 2"></div>
+                    <div class="swiper-slide"><img src="gallery3.jpg" alt="갤러리 사진 3"></div>
+                    <div class="swiper-slide"><img src="gallery4.jpg" alt="갤러리 사진 4"></div>
+                    <div class="swiper-slide"><img src="gallery5.jpg" alt="갤러리 사진 5"></div>
+                </div>
+                <!-- 하단 페이징 (점) -->
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
 
         <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
 
-        <!-- 4. 마음 전하실 곳 (계좌번호) -->
+        <!-- 4. 오시는 길 -->
+        <div class="section">
+            <h2>오시는 길</h2>
+            <p style="font-size: 18px; font-weight: 600; color: #333;">수원 SY웨딩홀</p>
+            <p>경기도 수원시 (상세 주소 입력 필요)</p>
+            
+            <!-- 카카오맵 지도가 들어갈 자리 -->
+            <div id="map" style="width:100%;height:250px;margin-top:20px;border-radius:8px;background-color:#eee;display:flex;align-items:center;justify-content:center;font-size:14px;color:#888;text-align:center;">
+                지도를 불러오고 있습니다...<br>(카카오 앱키 설정 필요)
+            </div>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
+
+        <!-- 5. 마음 전하실 곳 (계좌번호) -->
         <div class="section">
             <h2>마음 전하실 곳</h2>
-            <div class="account-box">
+            
+            <!-- 신랑 측 계좌 -->
+            <div class="account-box" style="margin-top: 15px;">
+                <div style="font-weight: 600; margin-bottom: 15px; color:#4a4a4a;">[신랑 측]</div>
+                
                 <div class="account-row">
-                    <div style="font-weight: 600; margin-bottom: 5px;">신랑 측</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">신랑 김용현</div>
                     <div class="bank-info">
-                        <span>국민은행 741802-00-265034 (김용현)</span>
-                        <button class="copy-btn" onclick="copyText('741802-00-265034')">복사</button>
+                        <span>국민 741802-00-265034</span>
+                        <button class="copy-btn" onclick="copyText('74180200265034')">복사</button>
                     </div>
                 </div>
+                
+                <!-- 신랑 부모님 계좌 (내용 수정 필요) -->
                 <div class="account-row">
-                    <div style="font-weight: 600; margin-bottom: 5px;">신부 측</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">아버지 OOO</div>
                     <div class="bank-info">
-                        <span>새마을금고 900-321-0456541 (김유경)</span>
-                        <button class="copy-btn" onclick="copyText('900-321-0456541')">복사</button>
+                        <span>OO은행 000-000-000000</span>
+                        <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
+                    </div>
+                </div>
+                
+                <div class="account-row">
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">어머니 OOO</div>
+                    <div class="bank-info">
+                        <span>OO은행 000-000-000000</span>
+                        <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 신부 측 계좌 -->
+            <div class="account-box">
+                <div style="font-weight: 600; margin-bottom: 15px; color:#4a4a4a;">[신부 측]</div>
+                
+                <div class="account-row">
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">신부 김유경</div>
+                    <div class="bank-info">
+                        <span>새마을금고 9003210456541</span>
+                        <button class="copy-btn" onclick="copyText('9003210456541')">복사</button>
+                    </div>
+                </div>
+
+                <!-- 신부 부모님 계좌 (내용 수정 필요) -->
+                <div class="account-row">
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">아버지 OOO</div>
+                    <div class="bank-info">
+                        <span>OO은행 000-000-000000</span>
+                        <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
+                    </div>
+                </div>
+                
+                <div class="account-row">
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">어머니 OOO</div>
+                    <div class="bank-info">
+                        <span>OO은행 000-000-000000</span>
+                        <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 계좌번호 복사 기능 스크립트 -->
+    <!-- Swiper JS 불러오기 -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- 스크립트 실행 -->
+    <!-- 카카오맵 API (본인의 앱키로 변경 필수) -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_발급받은_카카오_자바스크립트_키를_넣으세요"></script>
+
     <script>
+        // 갤러리 슬라이더 설정
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 10, // 사진과 사진 사이 간격
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true, // 점을 눌러서 이동 가능하게
+            },
+        });
+
+        // 계좌번호 복사 기능
         function copyText(text) {
             navigator.clipboard.writeText(text).then(function() {
                 alert('계좌번호가 복사되었습니다.');
@@ -131,6 +243,27 @@
                 alert('복사에 실패했습니다. 직접 선택해서 복사해주세요.');
             });
         }
+
+        // 카카오맵 렌더링 설정
+        window.onload = function() {
+            if (typeof kakao !== 'undefined' && kakao.maps) {
+                var mapContainer = document.getElementById('map'); 
+                var mapOption = { 
+                    // SY웨딩홀의 대략적인 임시 좌표입니다. 구글 맵 등에서 정확한 위도/경도를 찾아 변경해주세요.
+                    center: new kakao.maps.LatLng(37.2635727, 127.0286009), 
+                    level: 3 // 지도의 확대 레벨
+                };
+
+                // 지도 생성
+                var map = new kakao.maps.Map(mapContainer, mapOption); 
+                var markerPosition  = new kakao.maps.LatLng(37.2635727, 127.0286009); 
+                var marker = new kakao.maps.Marker({ position: markerPosition });
+                marker.setMap(map);
+                
+                // 지도 내부의 안내 문구(로딩 텍스트) 제거
+                mapContainer.innerHTML = ''; 
+            }
+        };
     </script>
 </body>
 </html>
