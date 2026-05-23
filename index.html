@@ -241,17 +241,17 @@
                     </div>
                 </div>
                 <div class="account-row">
-                    <div style="font-size:13px; color:#666; margin-bottom:3px;">아버지 OOO</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">아버지 김정수</div>
                     <div class="bank-info">
-                        <span>OO은행 000-000-000000</span>
-                        <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
+                        <span>농협 352-0430-7006-23</span>
+                        <button class="copy-btn" onclick="copyText('3520430700623')">복사</button>
                     </div>
                 </div>
                 <div class="account-row">
-                    <div style="font-size:13px; color:#666; margin-bottom:3px;">어머니 OOO</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:3px;">어머니 김계순</div>
                     <div class="bank-info">
-                        <span>OO은행 000-000-000000</span>
-                        <button class="copy-btn" onclick="copyText('000000000000')">복사</button>
+                        <span>농협 453030-52-151914</span>
+                        <button class="copy-btn" onclick="copyText('45303052151914')">복사</button>
                     </div>
                 </div>
             </div>
@@ -335,17 +335,19 @@
         };
 
         // --- 4. 카카오톡 공유 기능 ---
-        // (주의) 아래 항목에 본인의 자바스크립트 키를 반드시 입력하세요!
-        if (!Kakao.isInitialized()) {
-            Kakao.init('d3c14ef170ac706a80006fa4c81c02bd'); 
-        }
-
         function shareKakao() {
             try {
-                if (!Kakao.isInitialized()) {
-                    alert("카카오 초기화에 실패했습니다. 자바스크립트 키를 다시 확인해주세요.");
+                // 1. 카카오 스크립트가 로드되지 않았을 때의 안전장치
+                if (typeof Kakao === 'undefined') {
+                    alert("카카오 기능을 불러오지 못했습니다.\n광고 차단 앱(애드블록)이나 시크릿 모드를 끄고 새로고침 해주세요.");
                     return;
                 }
+                
+                // 2. 카카오 초기화가 안 되어 있다면 여기서 진행
+                if (!Kakao.isInitialized()) {
+                    Kakao.init('d3c14ef170ac706a80006fa4c81c02bd'); 
+                }
+
                 Kakao.Share.sendDefault({
                     objectType: 'feed',
                     content: {
