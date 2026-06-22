@@ -87,6 +87,25 @@
         .kakao-share-btn { background-color: #FEE500; color: #000; }
         .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
 
+        /* 갤러리 (그리드 + 모달) 스타일 */
+        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 25px; }
+        .grid-item { aspect-ratio: 1 / 1; overflow: hidden; border-radius: 4px; cursor: pointer; display: none; background: #f5f5f5; } 
+        .grid-item:nth-child(-n+9) { display: block; } /* 처음 9장만 표시 */
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .grid-item:hover img { transform: scale(1.05); }
+
+        .more-btn { background: #fff; border: 1px solid #ddd; color: #555; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0 auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        .more-btn:hover { background: #f5f5f5; }
+
+        /* 사진 확대(풀스크린) 모달 */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); }
+        .modal-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; font-weight: 300; cursor: pointer; z-index: 1010; line-height: 1; padding: 10px; }
+        .modal .swiper { width: 100%; height: 80vh; max-width: 600px; }
+        .modal .swiper-slide { background: transparent; display: flex; justify-content: center; align-items: center; }
+        .modal .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
+        .modal .swiper-pagination-fraction { color: #fff; font-size: 14px; letter-spacing: 2px; }
+
         /* 다크모드 대응 */
         @media (prefers-color-scheme: dark) {
             #timer { background: rgba(216, 27, 96, 0.1) !important; box-shadow: none; }
@@ -196,16 +215,12 @@
 
         <div class="section">
             <h2>GALLERY</h2>
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="1.jpg" alt="사진1"></div>
-                    <div class="swiper-slide"><img src="2.jpg" alt="사진2"></div>
-                    <div class="swiper-slide"><img src="3.jpg" alt="사진3"></div>
-                    <div class="swiper-slide"><img src="4.jpg" alt="사진4"></div>
-                    <div class="swiper-slide"><img src="5.jpg" alt="사진5"></div>
-                </div>
-                <div class="swiper-pagination"></div>
+            <div class="photo-grid" id="photoGrid">
+                <!-- JS에서 사진 48장이 자동으로 동적 생성됩니다 -->
             </div>
+            <button id="morePhotosBtn" class="more-btn" onclick="showAllPhotos()">
+                <span class="ko">사진 더보기 ∨</span><span class="en">Show More Photos ∨</span>
+            </button>
         </div>
 
         <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
@@ -330,6 +345,19 @@
         </div>
     </div>
 
+    <!-- 사진 확대 모달 컨테이너 -->
+    <div id="photoModal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <div class="swiper modalSwiper">
+                <div class="swiper-wrapper" id="modalSwiperWrapper">
+                    <!-- JS에서 동적 생성 -->
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- 스크립트 영역 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
@@ -357,9 +385,52 @@
             }
         }
 
+        // --- 갤러리 (그리드 + 모달) 관련 함수 ---
+        const totalPhotos = 48;
+        let modalSwiper;
+
+        function initGallery() {
+            const photoGrid = document.getElementById('photoGrid');
+            const modalSwiperWrapper = document.getElementById('modalSwiperWrapper');
+            let gridHtml = '';
+            let swiperHtml = '';
+            
+            for(let i=1; i<=totalPhotos; i++) {
+                // loading="lazy" 추가로 48장의 사진이 한 번에 불러와져 데이터가 폭주하는 것을 방지
+                gridHtml += `<div class="grid-item" onclick="openModal(${i-1})"><img src="${i}.jpg" alt="웨딩 사진 ${i}" loading="lazy"></div>`;
+                swiperHtml += `<div class="swiper-slide"><img src="${i}.jpg" loading="lazy"></div>`;
+            }
+            
+            photoGrid.innerHTML = gridHtml;
+            modalSwiperWrapper.innerHTML = swiperHtml;
+
+            // 모달 안쪽의 슬라이더 초기화 (48장이므로 점 대신 분수로 표시)
+            modalSwiper = new Swiper(".modalSwiper", {
+                spaceBetween: 10,
+                pagination: { el: ".swiper-pagination", type: "fraction" }, 
+                observer: true,
+                observeParents: true,
+            });
+        }
+
+        function showAllPhotos() {
+            const items = document.querySelectorAll('.grid-item');
+            items.forEach(item => item.style.display = 'block');
+            document.getElementById('morePhotosBtn').style.display = 'none';
+        }
+
+        function openModal(index) {
+            document.getElementById('photoModal').style.display = 'block';
+            modalSwiper.slideTo(index, 0); // 누른 사진으로 즉시 이동
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').style.display = 'none';
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
-            // 갤러리 설정
-            new Swiper(".mySwiper", { spaceBetween: 10, pagination: { el: ".swiper-pagination", clickable: true } });
+            // 갤러리 동적 생성 및 초기화
+            initGallery();
             
             // 디데이 타이머
             setInterval(function() {
