@@ -441,14 +441,36 @@
             document.getElementById('morePhotosBtn').style.display = 'none';
         }
 
+        // 실제로 모달 화면을 숨기는 내부 헬퍼 함수
+        function hideModalDOM() {
+            document.getElementById('photoModal').style.display = 'none';
+        }
+
         function openModal(index) {
             document.getElementById('photoModal').style.display = 'block';
             modalSwiper.slideTo(index, 0); // 누른 사진으로 즉시 이동
+            
+            // 모바일 기기에서 뒤로가기를 눌렀을 때 청첩장이 꺼지지 않고 사진만 닫히도록 가상의 페이지 상태 생성
+            if (!history.state || !history.state.modalOpen) {
+                history.pushState({ modalOpen: true }, '');
+            }
         }
 
         function closeModal() {
-            document.getElementById('photoModal').style.display = 'none';
+            // 사용자가 화면의 X 버튼 등을 눌러 직접 닫을 때, 가상 히스토리 상태를 뒤로가기로 제거하여 브라우저 히스토리 꼬임 방지
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            } else {
+                hideModalDOM();
+            }
         }
+
+        // 스마트폰의 물리 및 제스처 뒤로가기 버튼 감지 리스너
+        window.addEventListener('popstate', function(event) {
+            if (!event.state || !event.state.modalOpen) {
+                hideModalDOM();
+            }
+        });
 
         // --- 커스텀 토스트 알림창 띄우기 함수 (기본 alert 대체) ---
         function showToast(message) {
