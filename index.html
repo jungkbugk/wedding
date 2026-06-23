@@ -6,7 +6,7 @@
     
     <!-- 카카오톡 공유시 썸네일 -->
     <meta property="og:title" content="김용현 ❤️ 김유경 결혼합니다">
-    <meta property="og:description" content="2026년 10월 9일 금요일 오후 2시, 수원 SY컨벤션웨딩홀">
+    <meta property="og:description" content="2026년 10월 9일 금요일 오후 2시, 수원 SY컨벤션웨딩홀 9F">
     <meta property="og:image" content="https://jungkbugk.github.io/wedding/main.jpg">
     <meta property="og:url" content="https://jungkbugk.github.io/wedding/">
 
@@ -62,11 +62,27 @@
         .wedding-day { background-color: #d81b60; color: #fff !important; border-radius: 50%; display: inline-block; width: 32px; height: 32px; line-height: 32px; font-weight: bold; box-shadow: 0 3px 8px rgba(216,27,96,0.3); }
         .d-day-text { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 900; color: #d81b60; white-space: nowrap; }
 
-        /* 갤러리 */
-        .swiper { width: 100%; padding-bottom: 40px; }
-        .swiper-slide { height: 450px; background: #f5f5f5; border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
-        .swiper-pagination-bullet-active { background-color: #a89f91 !important; }
+        /* 갤러리 (그리드 + 모달) 스타일 */
+        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 25px; }
+        .grid-item { aspect-ratio: 1 / 1; overflow: hidden; border-radius: 4px; cursor: pointer; display: none; background: #f5f5f5; } 
+        .grid-item:nth-child(-n+9) { display: block; } /* 처음 9장만 표시 */
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .grid-item:hover img { transform: scale(1.05); }
+
+        .more-btn { background: #fff; border: 1px solid #ddd; color: #555; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0 auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        .more-btn:hover { background: #f5f5f5; }
+
+        /* 사진 확대(풀스크린) 모달 */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); }
+        .modal-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; font-weight: 300; cursor: pointer; z-index: 1010; line-height: 1; padding: 10px; }
+        .modal .swiper { width: 100%; height: 80vh; max-width: 600px; }
+        .modal .swiper-slide { background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        
+        /* 가로 세로 비율 유지 및 정중앙 정렬 */
+        .modal .swiper-zoom-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .modal .swiper-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .modal .swiper-pagination-fraction { color: #fff; font-size: 14px; letter-spacing: 2px; }
         
         /* 오시는 길 & 인포박스 */
         .map-container { width: 100%; height: 250px; margin-top: 20px; border-radius: 8px; background-color: #eee; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #888; }
@@ -87,24 +103,9 @@
         .kakao-share-btn { background-color: #FEE500; color: #000; }
         .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
 
-        /* 갤러리 (그리드 + 모달) 스타일 */
-        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 25px; }
-        .grid-item { aspect-ratio: 1 / 1; overflow: hidden; border-radius: 4px; cursor: pointer; display: none; background: #f5f5f5; } 
-        .grid-item:nth-child(-n+9) { display: block; } /* 처음 9장만 표시 */
-        .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-        .grid-item:hover img { transform: scale(1.05); }
-
-        .more-btn { background: #fff; border: 1px solid #ddd; color: #555; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0 auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
-        .more-btn:hover { background: #f5f5f5; }
-
-        /* 사진 확대(풀스크린) 모달 */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); }
-        .modal-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; font-weight: 300; cursor: pointer; z-index: 1010; line-height: 1; padding: 10px; }
-        .modal .swiper { width: 100%; height: 80vh; max-width: 600px; }
-        .modal .swiper-slide { background: transparent; display: flex; justify-content: center; align-items: center; }
-        .modal .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
-        .modal .swiper-pagination-fraction { color: #fff; font-size: 14px; letter-spacing: 2px; }
+        /* 커스텀 토스트 알림창 */
+        #toast { visibility: hidden; min-width: 250px; background-color: rgba(0,0,0,0.85); color: #fff; text-align: center; border-radius: 30px; padding: 14px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; transition: visibility 0s, opacity 0.3s ease-in-out; opacity: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        #toast.show { visibility: visible; opacity: 1; }
 
         /* 다크모드 대응 */
         @media (prefers-color-scheme: dark) {
@@ -114,7 +115,6 @@
         @media screen and (min-width: 768px) { 
             body { padding: 40px 0; }
             .container { max-width: 700px; border-radius: 20px; } 
-            .swiper-slide { height: 600px; }
             .map-container { height: 350px; }
         }
     </style>
@@ -180,6 +180,10 @@
 
         <div class="section">
             <h2>CALENDAR</h2>
+            <!-- 달력 연/월 표시 추가 -->
+            <div style="font-size: 22px; font-weight: 600; color: #a39081; margin-bottom: 20px;">
+                <span class="ko">2026. 10</span><span class="en">OCTOBER 2026</span>
+            </div>
             <div class="calendar-wrap">
                 <table class="calendar">
                     <tr>
@@ -237,6 +241,16 @@
             
             <div id="map" class="map-container">
                 <span class="ko">지도를 불러오고 있습니다...</span><span class="en">Loading map...</span>
+            </div>
+            
+            <!-- 외부 지도 앱 연동 버튼 추가 -->
+            <div style="display: flex; gap: 8px; margin-top: 15px;">
+                <button class="link-share-btn" style="flex: 1; margin-bottom: 0; padding: 12px; font-size: 13px; font-weight: 600;" onclick="window.open('https://map.naver.com/p/search/수원%20SY컨벤션웨딩홀', '_blank')">
+                    <span class="ko">📍 네이버 지도</span><span class="en">📍 Naver Map</span>
+                </button>
+                <button class="link-share-btn" style="flex: 1; margin-bottom: 0; padding: 12px; font-size: 13px; font-weight: 600;" onclick="window.open('https://map.kakao.com/link/map/SY컨벤션웨딩홀,37.2544769,127.0750343', '_blank')">
+                    <span class="ko">📍 카카오 맵</span><span class="en">📍 Kakao Map</span>
+                </button>
             </div>
             
             <div class="info-box">
@@ -345,7 +359,7 @@
         </div>
     </div>
 
-    <!-- 사진 확대 모달 컨테이너 -->
+    <!-- 사진 확대 모달 컨테이너 (스와이프, 줌 및 키보드 이동 활성화) -->
     <div id="photoModal" class="modal">
         <span class="close-modal" onclick="closeModal()">&times;</span>
         <div class="modal-content">
@@ -357,6 +371,9 @@
             </div>
         </div>
     </div>
+
+    <!-- 커스텀 토스트 알림 엘리먼트 -->
+    <div id="toast"></div>
 
     <!-- 스크립트 영역 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -396,20 +413,25 @@
             let swiperHtml = '';
             
             for(let i=1; i<=totalPhotos; i++) {
-                // loading="lazy" 추가로 48장의 사진이 한 번에 불러와져 데이터가 폭주하는 것을 방지
                 gridHtml += `<div class="grid-item" onclick="openModal(${i-1})"><img src="${i}.jpg" alt="웨딩 사진 ${i}" loading="lazy"></div>`;
-                swiperHtml += `<div class="swiper-slide"><img src="${i}.jpg" loading="lazy"></div>`;
+                // 확대(Zoom) 기능을 위해 swiper-zoom-container 클래스로 이미지 감싸기
+                swiperHtml += `<div class="swiper-slide"><div class="swiper-zoom-container"><img src="${i}.jpg" loading="lazy"></div></div>`;
             }
             
             photoGrid.innerHTML = gridHtml;
             modalSwiperWrapper.innerHTML = swiperHtml;
 
-            // 모달 안쪽의 슬라이더 초기화 (48장이므로 점 대신 분수로 표시)
+            // 모달 안쪽의 슬라이더 초기화
             modalSwiper = new Swiper(".modalSwiper", {
                 spaceBetween: 10,
                 pagination: { el: ".swiper-pagination", type: "fraction" }, 
                 observer: true,
                 observeParents: true,
+                zoom: true, // 스마트폰 핀치(손가락) 및 PC 더블클릭 확대 기능 활성화
+                keyboard: { // PC 방향키 이동 기능 활성화
+                    enabled: true,
+                    onlyInViewport: false,
+                },
             });
         }
 
@@ -426,6 +448,88 @@
 
         function closeModal() {
             document.getElementById('photoModal').style.display = 'none';
+        }
+
+        // --- 커스텀 토스트 알림창 띄우기 함수 (기본 alert 대체) ---
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.classList.add("show");
+            setTimeout(function() {
+                toast.classList.remove("show");
+            }, 2500);
+        }
+
+        // 복사 기능 (언어별 알림창 다르게 표시)
+        function copyText(t) { 
+            var msgSuccess = isEnglish ? "Account number copied." : "계좌번호가 복사되었습니다.";
+            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
+            
+            // iframe 보안 정책을 준수하는 범용 복사 기법
+            const textArea = document.createElement("textarea");
+            textArea.value = t;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(msgSuccess);
+            } catch (err) {
+                showToast(msgFail);
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        function copyLink() { 
+            var msgSuccess = isEnglish ? "Link copied!" : "링크가 복사되었습니다.";
+            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
+            
+            const textArea = document.createElement("textarea");
+            textArea.value = 'https://jungkbugk.github.io/wedding/';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(msgSuccess);
+            } catch (err) {
+                showToast(msgFail);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // 카카오맵 지도 렌더링
+        window.onload = function() {
+            try {
+                if (typeof kakao !== 'undefined' && kakao.maps) {
+                    var mapContainer = document.getElementById('map'); 
+                    var mapOption = { center: new kakao.maps.LatLng(37.2544769, 127.0750343), level: 3 };
+                    var map = new kakao.maps.Map(mapContainer, mapOption); 
+                    var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(37.2544769, 127.0750343) });
+                    marker.setMap(map);
+                    
+                    var child = mapContainer.firstChild;
+                    while (child) { if (child.nodeType === 3) { mapContainer.removeChild(child); break; } child = child.nextSibling; }
+                }
+            } catch(e) {}
+        };
+
+        // 카카오톡 공유
+        function shareKakao() {
+            if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) { 
+                try { Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); } catch(e) { return; }
+            }
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '김용현 ❤️ 김유경 결혼합니다 (Wedding Invitation)',
+                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀 9F',
+                    imageUrl: 'https://jungkbugk.github.io/wedding/main.jpg',
+                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
+                },
+                buttons: [{
+                    title: '모바일 청첩장 보기 (View Details)',
+                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
+                }]
+            });
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -458,54 +562,6 @@
                     "<div style='font-size:15px; color:#555; font-weight:600;'>" + timeText + "</div>";
             }, 1000);
         });
-
-        // 복사 기능 (언어별 알림창 다르게 표시)
-        function copyText(t) { 
-            var msgSuccess = isEnglish ? "Account number copied." : "계좌번호가 복사되었습니다.";
-            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
-            navigator.clipboard.writeText(t).then(function() { alert(msgSuccess); }, function() { alert(msgFail); }); 
-        }
-        function copyLink() { 
-            var msgSuccess = isEnglish ? "Link copied!" : "링크가 복사되었습니다.";
-            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
-            navigator.clipboard.writeText('https://jungkbugk.github.io/wedding/').then(function() { alert(msgSuccess); }, function() { alert(msgFail); }); 
-        }
-
-        // 카카오맵
-        window.onload = function() {
-            try {
-                if (typeof kakao !== 'undefined' && kakao.maps) {
-                    var mapContainer = document.getElementById('map'); 
-                    var mapOption = { center: new kakao.maps.LatLng(37.2544769, 127.0750343), level: 3 };
-                    var map = new kakao.maps.Map(mapContainer, mapOption); 
-                    var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(37.2544769, 127.0750343) });
-                    marker.setMap(map);
-                    
-                    var child = mapContainer.firstChild;
-                    while (child) { if (child.nodeType === 3) { mapContainer.removeChild(child); break; } child = child.nextSibling; }
-                }
-            } catch(e) {}
-        };
-
-        // 카카오톡 공유
-        function shareKakao() {
-            if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) { 
-                try { Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); } catch(e) { return; }
-            }
-            Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '김용현 ❤️ 김유경 결혼합니다 (Wedding Invitation)',
-                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀',
-                    imageUrl: 'https://jungkbugk.github.io/wedding/main.jpg',
-                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
-                },
-                buttons: [{
-                    title: '모바일 청첩장 보기 (View Details)',
-                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
-                }]
-            });
-        }
     </script>
 </body>
 </html>
