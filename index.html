@@ -99,8 +99,8 @@
         
         /* 버튼 */
         .btn-box { margin-top: 40px; }
-        .mobile-share-btn, .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; }
-        .mobile-share-btn { background-color: #333; color: #fff; }
+        .kakao-share-btn, .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; }
+        .kakao-share-btn { background-color: #FEE500; color: #000; }
         .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
 
         /* 커스텀 토스트 알림창 */
@@ -342,13 +342,11 @@
             </div>
 
             <div class="btn-box">
-                <button class="mobile-share-btn" onclick="shareNative()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;">
-                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                        <polyline points="16 6 12 2 8 6"></polyline>
-                        <line x1="12" y1="2" x2="12" y2="15"></line>
+                <button class="kakao-share-btn" onclick="shareKakao()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;">
+                        <path d="M12 3c-5.523 0-10 3.582-10 8 0 2.825 1.733 5.308 4.348 6.786-.333 1.134-1.2 4.133-1.246 4.341-.014.058.01.118.06.14.03.012.062.01.088-.005.158-.094 3.738-2.473 5.17-3.447.834.12 1.697.185 2.58.185 5.523 0 10-3.582 10-8s-4.477-8-10-8z"/>
                     </svg>
-                    <span class="ko">모바일 공유하기</span><span class="en">Share on Mobile</span>
+                    <span class="ko">카카오톡 공유하기</span><span class="en">Share via KakaoTalk</span>
                 </button>
                 <button class="link-share-btn" onclick="copyLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;">
@@ -379,9 +377,15 @@
 
     <!-- 스크립트 영역 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
 
     <script>
+        // 카카오 API 초기화
+        if (!Kakao.isInitialized()) {
+            Kakao.init('19c01a2541029c95eeffca2bcd7d559c');
+        }
+
         // 현재 선택된 언어 상태
         let isEnglish = false;
 
@@ -519,6 +523,35 @@
             document.body.removeChild(textArea);
         }
 
+        // 진짜 카카오톡 공유 API (카톡 앱을 열고 채팅방 선택 화면을 띄움)
+        function shareKakao() {
+            var titleText = isEnglish ? "Yonghyun ❤️ Yookyung's Wedding" : "김용현 ❤️ 김유경 결혼합니다";
+            var descText = isEnglish ? "OCT 09, 2026 FRI 02:00 PM\nSuwon SY Convention 9F" : "2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀 9F";
+            var btnText = isEnglish ? "View Invitation" : "청첩장 보기";
+
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: titleText,
+                    description: descText,
+                    imageUrl: 'https://jungkbugk.github.io/wedding/main.jpg',
+                    link: {
+                        mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
+                        webUrl: 'https://jungkbugk.github.io/wedding/',
+                    },
+                },
+                buttons: [
+                    {
+                        title: btnText,
+                        link: {
+                            mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
+                            webUrl: 'https://jungkbugk.github.io/wedding/',
+                        },
+                    },
+                ],
+            });
+        }
+
         // 카카오맵 지도 렌더링
         window.onload = function() {
             try {
@@ -535,21 +568,22 @@
             } catch(e) {}
         };
 
-        // 모바일 네이티브 공유 (카카오톡, 문자 등 기기 자체 기능 사용)
-        function shareNative() {
-            var shareData = {
-                title: '김용현 ❤️ 김유경 결혼합니다',
-                text: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀 9F',
-                url: 'https://jungkbugk.github.io/wedding/'
-            };
-            if (navigator.share) {
-                navigator.share(shareData).catch(function(err) {
-                    console.log('공유 취소 또는 에러:', err);
-                });
-            } else {
-                // PC 등 기능을 지원하지 않는 경우 링크 복사로 자동 대체
-                copyLink();
+        // 카카오톡 공유 버튼 우회 방식 (링크 복사 후 알림)
+        function shareKakaoFallback() {
+            var msgSuccess = isEnglish ? "Link copied! Please paste it in your chat." : "링크가 복사되었습니다.\n카카오톡 대화창에 붙여넣기 해주세요.";
+            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
+            
+            const textArea = document.createElement("textarea");
+            textArea.value = 'https://jungkbugk.github.io/wedding/';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(msgSuccess);
+            } catch (err) {
+                showToast(msgFail);
             }
+            document.body.removeChild(textArea);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
