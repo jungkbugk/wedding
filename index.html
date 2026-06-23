@@ -99,8 +99,8 @@
         
         /* 버튼 */
         .btn-box { margin-top: 40px; }
-        .kakao-share-btn, .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; }
-        .kakao-share-btn { background-color: #FEE500; color: #000; }
+        .mobile-share-btn, .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; }
+        .mobile-share-btn { background-color: #333; color: #fff; }
         .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
 
         /* 커스텀 토스트 알림창 */
@@ -342,11 +342,13 @@
             </div>
 
             <div class="btn-box">
-                <button class="kakao-share-btn" onclick="shareKakao()">
-                    <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px;">
-                        <path d="M9 2C4.02944 2 0 5.24264 0 9.25C0 11.8392 1.63777 14.1166 4.10389 15.3571C3.89613 16.0354 3.19515 18.0163 3.16104 18.1368C3.12693 18.2573 3.25055 18.2721 3.32839 18.2163C3.40623 18.1604 5.92211 16.4866 6.84073 15.8679C7.53427 16.0356 8.25624 16.125 9 16.125C13.9706 16.125 18 12.8824 18 8.875C18 4.86764 13.9706 2 9 2Z" fill="#000000"/>
+                <button class="mobile-share-btn" onclick="shareNative()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;">
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                        <polyline points="16 6 12 2 8 6"></polyline>
+                        <line x1="12" y1="2" x2="12" y2="15"></line>
                     </svg>
-                    <span class="ko">카카오톡으로 공유하기</span><span class="en">Share via KakaoTalk</span>
+                    <span class="ko">모바일 공유하기</span><span class="en">Share on Mobile</span>
                 </button>
                 <button class="link-share-btn" onclick="copyLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;">
@@ -377,7 +379,6 @@
 
     <!-- 스크립트 영역 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
 
     <script>
@@ -534,24 +535,21 @@
             } catch(e) {}
         };
 
-        // 카카오톡 공유
-        function shareKakao() {
-            if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) { 
-                try { Kakao.init('19c01a2541029c95eeffca2bcd7d559c'); } catch(e) { return; }
+        // 모바일 네이티브 공유 (카카오톡, 문자 등 기기 자체 기능 사용)
+        function shareNative() {
+            var shareData = {
+                title: '김용현 ❤️ 김유경 결혼합니다',
+                text: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀 9F',
+                url: 'https://jungkbugk.github.io/wedding/'
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(function(err) {
+                    console.log('공유 취소 또는 에러:', err);
+                });
+            } else {
+                // PC 등 기능을 지원하지 않는 경우 링크 복사로 자동 대체
+                copyLink();
             }
-            Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '김용현 ❤️ 김유경 결혼합니다 (Wedding Invitation)',
-                    description: '2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀 9F',
-                    imageUrl: 'https://jungkbugk.github.io/wedding/main.jpg',
-                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
-                },
-                buttons: [{
-                    title: '모바일 청첩장 보기 (View Details)',
-                    link: { mobileWebUrl: 'https://jungkbugk.github.io/wedding/', webUrl: 'https://jungkbugk.github.io/wedding/' }
-                }]
-            });
         }
 
         document.addEventListener("DOMContentLoaded", function() {
