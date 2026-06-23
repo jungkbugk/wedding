@@ -99,9 +99,7 @@
         
         /* 버튼 */
         .btn-box { margin-top: 40px; }
-        .kakao-share-btn, .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; }
-        .kakao-share-btn { background-color: #FEE500; color: #000; }
-        .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
+        .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
 
         /* 커스텀 토스트 알림창 */
         #toast { visibility: hidden; min-width: 250px; background-color: rgba(0,0,0,0.85); color: #fff; text-align: center; border-radius: 30px; padding: 14px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; transition: visibility 0s, opacity 0.3s ease-in-out; opacity: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
@@ -342,12 +340,6 @@
             </div>
 
             <div class="btn-box">
-                <button class="kakao-share-btn" onclick="shareKakao()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;">
-                        <path d="M12 3c-5.523 0-10 3.582-10 8 0 2.825 1.733 5.308 4.348 6.786-.333 1.134-1.2 4.133-1.246 4.341-.014.058.01.118.06.14.03.012.062.01.088-.005.158-.094 3.738-2.473 5.17-3.447.834.12 1.697.185 2.58.185 5.523 0 10-3.582 10-8s-4.477-8-10-8z"/>
-                    </svg>
-                    <span class="ko">카카오톡 공유하기</span><span class="en">Share via KakaoTalk</span>
-                </button>
                 <button class="link-share-btn" onclick="copyLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;">
                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
@@ -377,15 +369,9 @@
 
     <!-- 스크립트 영역 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
 
     <script>
-        // 카카오 API 초기화
-        if (!Kakao.isInitialized()) {
-            Kakao.init('19c01a2541029c95eeffca2bcd7d559c');
-        }
-
         // 현재 선택된 언어 상태
         let isEnglish = false;
 
@@ -523,42 +509,6 @@
             document.body.removeChild(textArea);
         }
 
-        // 카카오톡 공유하기 우회 및 하이브리드 앱 실행 연동 방식
-        function shareKakao() {
-            var msgSuccess = isEnglish 
-                ? "Link copied! Opening KakaoTalk...\nPlease paste it in the chat room." 
-                : "링크가 복사되었습니다!\n카카오톡이 열리면 대화창에 붙여넣기 해주세요.";
-            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
-            
-            // 1. 클립보드에 청첩장 주소 복사
-            const textArea = document.createElement("textarea");
-            textArea.value = 'https://jungkbugk.github.io/wedding/';
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast(msgSuccess);
-            } catch (err) {
-                showToast(msgFail);
-            }
-            document.body.removeChild(textArea);
-
-            // 2. 안내 토스트 메시지를 읽을 시간을 준 뒤(1.2초 후), 스마트폰 카카오톡 앱을 자동으로 열어줌
-            setTimeout(function() {
-                const userAgent = navigator.userAgent.toLowerCase();
-                if (userAgent.match(/iphone|ipad|ipod/i)) {
-                    // iOS 카카오톡 실행 구문
-                    window.location.href = "kakaotalk://";
-                } else if (userAgent.match(/android/i)) {
-                    // 안드로이드 카카오톡 실행 구문
-                    window.location.href = "intent://#Intent;scheme=kakaotalk;package=com.kakao.talk;end";
-                } else {
-                    // PC 브라우저의 경우 카카오톡 공식 웹사이트 안내 새창
-                    window.open("https://www.kakaocorp.com/page/service/service/KakaoTalk", "_blank");
-                }
-            }, 1200);
-        }
-
         // 카카오맵 지도 렌더링
         window.onload = function() {
             try {
@@ -574,24 +524,6 @@
                 }
             } catch(e) {}
         };
-
-        // 카카오톡 공유 버튼 우회 방식 (링크 복사 후 알림)
-        function shareKakaoFallback() {
-            var msgSuccess = isEnglish ? "Link copied! Please paste it in your chat." : "링크가 복사되었습니다.\n카카오톡 대화창에 붙여넣기 해주세요.";
-            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
-            
-            const textArea = document.createElement("textarea");
-            textArea.value = 'https://jungkbugk.github.io/wedding/';
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast(msgSuccess);
-            } catch (err) {
-                showToast(msgFail);
-            }
-            document.body.removeChild(textArea);
-        }
 
         document.addEventListener("DOMContentLoaded", function() {
             // 갤러리 동적 생성 및 초기화
