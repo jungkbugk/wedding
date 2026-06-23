@@ -523,33 +523,40 @@
             document.body.removeChild(textArea);
         }
 
-        // 진짜 카카오톡 공유 API (카톡 앱을 열고 채팅방 선택 화면을 띄움)
+        // 카카오톡 공유하기 우회 및 하이브리드 앱 실행 연동 방식
         function shareKakao() {
-            var titleText = isEnglish ? "Yonghyun ❤️ Yookyung's Wedding" : "김용현 ❤️ 김유경 결혼합니다";
-            var descText = isEnglish ? "OCT 09, 2026 FRI 02:00 PM\nSuwon SY Convention 9F" : "2026년 10월 9일 금요일 오후 2시\n수원 SY컨벤션웨딩홀 9F";
-            var btnText = isEnglish ? "View Invitation" : "청첩장 보기";
+            var msgSuccess = isEnglish 
+                ? "Link copied! Opening KakaoTalk...\nPlease paste it in the chat room." 
+                : "링크가 복사되었습니다!\n카카오톡이 열리면 대화창에 붙여넣기 해주세요.";
+            var msgFail = isEnglish ? "Failed to copy." : "복사 실패";
+            
+            // 1. 클립보드에 청첩장 주소 복사
+            const textArea = document.createElement("textarea");
+            textArea.value = 'https://jungkbugk.github.io/wedding/';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(msgSuccess);
+            } catch (err) {
+                showToast(msgFail);
+            }
+            document.body.removeChild(textArea);
 
-            Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: titleText,
-                    description: descText,
-                    imageUrl: 'https://jungkbugk.github.io/wedding/main.jpg',
-                    link: {
-                        mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
-                        webUrl: 'https://jungkbugk.github.io/wedding/',
-                    },
-                },
-                buttons: [
-                    {
-                        title: btnText,
-                        link: {
-                            mobileWebUrl: 'https://jungkbugk.github.io/wedding/',
-                            webUrl: 'https://jungkbugk.github.io/wedding/',
-                        },
-                    },
-                ],
-            });
+            // 2. 안내 토스트 메시지를 읽을 시간을 준 뒤(1.2초 후), 스마트폰 카카오톡 앱을 자동으로 열어줌
+            setTimeout(function() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                if (userAgent.match(/iphone|ipad|ipod/i)) {
+                    // iOS 카카오톡 실행 구문
+                    window.location.href = "kakaotalk://";
+                } else if (userAgent.match(/android/i)) {
+                    // 안드로이드 카카오톡 실행 구문
+                    window.location.href = "intent://#Intent;scheme=kakaotalk;package=com.kakao.talk;end";
+                } else {
+                    // PC 브라우저의 경우 카카오톡 공식 웹사이트 안내 새창
+                    window.open("https://www.kakaocorp.com/page/service/service/KakaoTalk", "_blank");
+                }
+            }, 1200);
         }
 
         // 카카오맵 지도 렌더링
