@@ -418,8 +418,8 @@
     <!-- 커스텀 토스트 알림 엘리먼트 -->
     <div id="toast"></div>
 
-    <!-- 배경음악 오디오 -->
-    <audio id="bgm" loop>
+    <!-- 배경음악 오디오 (미리 로딩되도록 preload 추가) -->
+    <audio id="bgm" loop preload="auto">
         <source src="bgm.mp3" type="audio/mpeg">
     </audio>
     
@@ -552,15 +552,20 @@
                 var playPromise = bgm.play();
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
+                        // 브라우저가 재생을 허락하여 실제 음악이 틀어졌을 때 상태 변경
                         isPlaying = true;
                         bgmBtn.classList.add('playing');
-                    }).catch(e => { console.log("자동재생 대기중..."); });
+                        
+                        // 성공했을 때만 중복 실행 방지 리스너 해제 (이전 오류의 핵심 원인 해결)
+                        document.removeEventListener('click', enableAutoplay);
+                        document.removeEventListener('touchstart', enableAutoplay);
+                        document.removeEventListener('scroll', enableAutoplay);
+                    }).catch(e => { 
+                        // 실패 시 (스크롤 등으로 권한 거부 시) 다음 터치를 기다림
+                        console.log("자동재생 터치 대기중..."); 
+                    });
                 }
             }
-            // 한 번 실행 후 이벤트 리스너 해제 (중복 실행 방지)
-            document.removeEventListener('click', enableAutoplay);
-            document.removeEventListener('touchstart', enableAutoplay);
-            document.removeEventListener('scroll', enableAutoplay);
         }
 
         // --- 커스텀 토스트 알림창 띄우기 함수 (기본 alert 대체) ---
