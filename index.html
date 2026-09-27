@@ -94,12 +94,12 @@
         .account-row { margin-bottom: 12px; border-bottom: 1px solid #f5f5f5; padding-bottom: 12px; }
         .account-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
         .bank-info { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .bank-info span { color: #333; }
-        .copy-btn { background: #f0f0f0; color: #555; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; }
-        
-        /* 버튼 */
-        .btn-box { margin-top: 40px; }
-        .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; border: none; background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
+        .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
+
+        /* BGM 플레이어 (우측 하단 고정) */
+        .bgm-btn { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.95); border: 1px solid #eee; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: #a39081; transition: 0.3s; }
+        .bgm-btn.playing { animation: spin 3s linear infinite; color: #d81b60; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* 커스텀 토스트 알림창 */
         #toast { visibility: hidden; min-width: 250px; background-color: rgba(0,0,0,0.85); color: #fff; text-align: center; border-radius: 30px; padding: 14px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; transition: visibility 0s, opacity 0.3s ease-in-out; opacity: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
@@ -218,11 +218,73 @@
         <div class="section">
             <h2>GALLERY</h2>
             <div class="photo-grid" id="photoGrid">
-                <!-- JS에서 사진 48장이 자동으로 동적 생성됩니다 -->
+                <!-- JS에서 사진 36장이 자동으로 동적 생성됩니다 -->
             </div>
             <button id="morePhotosBtn" class="more-btn" onclick="showAllPhotos()">
                 <span class="ko">사진 더보기 ∨</span><span class="en">Show More Photos ∨</span>
             </button>
+        </div>
+
+        <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
+
+        <div class="section">
+            <h2><span class="ko">마음 전하실 곳</span><span class="en">FOR YOUR HEART</span></h2>
+            
+            <!-- 신랑 측 계좌 -->
+            <div class="account-box">
+                <div style="font-weight: 600; margin-bottom: 15px; color:#d81b60; font-size: 15px;">
+                    <span class="ko">신랑 측 계좌번호</span><span class="en">Groom's Side</span>
+                </div>
+                <div class="account-row">
+                    <div style="font-size:13px; color:#888;"><span class="ko">신랑 김용현</span><span class="en">Groom: Yonghyun Kim</span></div>
+                    <div class="bank-info">
+                        <span><span class="ko">국민</span><span class="en">KB</span> 741802-00-265034</span>
+                        <button class="copy-btn" onclick="copyText('74180200265034')"><span class="ko">복사</span><span class="en">Copy</span></button>
+                    </div>
+                </div>
+                <div class="account-row">
+                    <div style="font-size:13px; color:#888;"><span class="ko">아버지 김정수</span><span class="en">Father: Jeong-soo Kim</span></div>
+                    <div class="bank-info">
+                        <span><span class="ko">농협</span><span class="en">NH</span> 352-0430-7006-23</span>
+                        <button class="copy-btn" onclick="copyText('3520430700623')"><span class="ko">복사</span><span class="en">Copy</span></button>
+                    </div>
+                </div>
+                <div class="account-row">
+                    <div style="font-size:13px; color:#888;"><span class="ko">어머니 김계순</span><span class="en">Mother: Gye-soon Kim</span></div>
+                    <div class="bank-info">
+                        <span><span class="ko">농협</span><span class="en">NH</span> 453030-52-151914</span>
+                        <button class="copy-btn" onclick="copyText('45303052151914')"><span class="ko">복사</span><span class="en">Copy</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 신부 측 계좌 -->
+            <div class="account-box">
+                <div style="font-weight: 600; margin-bottom: 15px; color:#d81b60; font-size: 15px;">
+                    <span class="ko">신부 측 계좌번호</span><span class="en">Bride's Side</span>
+                </div>
+                <div class="account-row">
+                    <div style="font-size:13px; color:#888;"><span class="ko">신부 김유경</span><span class="en">Bride: Yookyung Kim</span></div>
+                    <div class="bank-info">
+                        <span><span class="ko">새마을금고</span><span class="en">KFCC</span> 9003-2104-5654-1</span>
+                        <button class="copy-btn" onclick="copyText('9003210456541')"><span class="ko">복사</span><span class="en">Copy</span></button>
+                    </div>
+                </div>
+                <div class="account-row">
+                    <div style="font-size:13px; color:#888;"><span class="ko">아버지 김영종</span><span class="en">Father: Young-jong Kim</span></div>
+                    <div class="bank-info">
+                        <span><span class="ko">농협</span><span class="en">NH</span> 601059-56-001041</span>
+                        <button class="copy-btn" onclick="copyText('60105956001041')"><span class="ko">복사</span><span class="en">Copy</span></button>
+                    </div>
+                </div>
+                <div class="account-row">
+                    <div style="font-size:13px; color:#888;"><span class="ko">어머니 김수미</span><span class="en">Mother: Su-mi Kim</span></div>
+                    <div class="bank-info">
+                        <span><span class="ko">농협</span><span class="en">NH</span> 356-0244-5128-13</span>
+                        <button class="copy-btn" onclick="copyText('3560244512813')"><span class="ko">복사</span><span class="en">Copy</span></button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
@@ -317,70 +379,8 @@
                     </a>
                 </p>
             </div>
-        </div>
 
-        <hr style="border: 0; height: 1px; background: #eee; margin: 0 20px;">
-
-        <div class="section">
-            <h2><span class="ko">마음 전하실 곳</span><span class="en">FOR YOUR HEART</span></h2>
-            
-            <!-- 신랑 측 계좌 -->
-            <div class="account-box">
-                <div style="font-weight: 600; margin-bottom: 15px; color:#d81b60; font-size: 15px;">
-                    <span class="ko">신랑 측 계좌번호</span><span class="en">Groom's Side</span>
-                </div>
-                <div class="account-row">
-                    <div style="font-size:13px; color:#888;"><span class="ko">신랑 김용현</span><span class="en">Groom: Yonghyun Kim</span></div>
-                    <div class="bank-info">
-                        <span><span class="ko">국민</span><span class="en">KB</span> 741802-00-265034</span>
-                        <button class="copy-btn" onclick="copyText('74180200265034')"><span class="ko">복사</span><span class="en">Copy</span></button>
-                    </div>
-                </div>
-                <div class="account-row">
-                    <div style="font-size:13px; color:#888;"><span class="ko">아버지 김정수</span><span class="en">Father: Jeong-soo Kim</span></div>
-                    <div class="bank-info">
-                        <span><span class="ko">농협</span><span class="en">NH</span> 352-0430-7006-23</span>
-                        <button class="copy-btn" onclick="copyText('3520430700623')"><span class="ko">복사</span><span class="en">Copy</span></button>
-                    </div>
-                </div>
-                <div class="account-row">
-                    <div style="font-size:13px; color:#888;"><span class="ko">어머니 김계순</span><span class="en">Mother: Gye-soon Kim</span></div>
-                    <div class="bank-info">
-                        <span><span class="ko">농협</span><span class="en">NH</span> 453030-52-151914</span>
-                        <button class="copy-btn" onclick="copyText('45303052151914')"><span class="ko">복사</span><span class="en">Copy</span></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 신부 측 계좌 -->
-            <div class="account-box">
-                <div style="font-weight: 600; margin-bottom: 15px; color:#d81b60; font-size: 15px;">
-                    <span class="ko">신부 측 계좌번호</span><span class="en">Bride's Side</span>
-                </div>
-                <div class="account-row">
-                    <div style="font-size:13px; color:#888;"><span class="ko">신부 김유경</span><span class="en">Bride: Yookyung Kim</span></div>
-                    <div class="bank-info">
-                        <span><span class="ko">새마을금고</span><span class="en">KFCC</span> 9003-2104-5654-1</span>
-                        <button class="copy-btn" onclick="copyText('9003210456541')"><span class="ko">복사</span><span class="en">Copy</span></button>
-                    </div>
-                </div>
-                <div class="account-row">
-                    <div style="font-size:13px; color:#888;"><span class="ko">아버지 김영종</span><span class="en">Father: Young-jong Kim</span></div>
-                    <div class="bank-info">
-                        <span><span class="ko">농협</span><span class="en">NH</span> 601059-56-001041</span>
-                        <button class="copy-btn" onclick="copyText('60105956001041')"><span class="ko">복사</span><span class="en">Copy</span></button>
-                    </div>
-                </div>
-                <div class="account-row">
-                    <div style="font-size:13px; color:#888;"><span class="ko">어머니 김수미</span><span class="en">Mother: Su-mi Kim</span></div>
-                    <div class="bank-info">
-                        <span><span class="ko">농협</span><span class="en">NH</span> 356-0244-5128-13</span>
-                        <button class="copy-btn" onclick="copyText('3560244512813')"><span class="ko">복사</span><span class="en">Copy</span></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="btn-box">
+            <div class="btn-box" style="margin-top: 40px;">
                 <button class="link-share-btn" onclick="copyLink()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;">
                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
@@ -408,11 +408,41 @@
     <!-- 커스텀 토스트 알림 엘리먼트 -->
     <div id="toast"></div>
 
+    <!-- 배경음악 오디오 -->
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- 우측 하단 BGM 재생/일시정지 버튼 -->
+    <div id="bgmBtn" class="bgm-btn" onclick="toggleBgm()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+    </div>
+
     <!-- 스크립트 영역 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=19c01a2541029c95eeffca2bcd7d559c"></script>
 
     <script>
+        // BGM 컨트롤
+        const bgm = document.getElementById('bgm');
+        const bgmBtn = document.getElementById('bgmBtn');
+        let isPlaying = false;
+
+        function toggleBgm() {
+            if (isPlaying) {
+                bgm.pause();
+                bgmBtn.classList.remove('playing');
+            } else {
+                bgm.play().catch(function(e) { console.log("오디오 재생 실패:", e); });
+                bgmBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+
         // 현재 선택된 언어 상태
         let isEnglish = false;
 
