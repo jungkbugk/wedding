@@ -94,10 +94,17 @@
         .account-row { margin-bottom: 12px; border-bottom: 1px solid #f5f5f5; padding-bottom: 12px; }
         .account-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
         .bank-info { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .link-share-btn { background-color: #f4f4f4; color: #333; border: 1px solid #ddd; }
+        .bank-info span { color: #333; }
+        .copy-btn { background: #f0f0f0; color: #555; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; }
+        
+        /* 버튼 & 하단 여백 */
+        .btn-box { margin-top: 40px; margin-bottom: 20px; }
+        .link-share-btn { border-radius: 8px; padding: 16px; width: 100%; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; background-color: #f4f4f4; color: #333; border: 1px solid #ddd; transition: background-color 0.2s; }
+        .link-share-btn:hover { background-color: #eaeaea; }
 
-        /* BGM 플레이어 (우측 하단 고정) */
-        .bgm-btn { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.95); border: 1px solid #eee; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: #a39081; transition: 0.3s; }
+        /* BGM 플레이어 (메인 캔버스 우측 하단 고정) */
+        .bgm-btn-wrap { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1000; pointer-events: none; }
+        .bgm-btn { position: absolute; right: 20px; bottom: 0; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.95); border: 1px solid #eee; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #a39081; transition: 0.3s; pointer-events: auto; }
         .bgm-btn.playing { animation: spin 3s linear infinite; color: #d81b60; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -113,7 +120,10 @@
         @media screen and (min-width: 768px) { 
             body { padding: 40px 0; }
             .container { max-width: 700px; border-radius: 20px; } 
+            .swiper-slide { height: 600px; }
             .map-container { height: 350px; }
+            .modal .swiper { max-width: 100%; }
+            .bgm-btn-wrap { max-width: 700px; }
         }
     </style>
     
@@ -413,13 +423,15 @@
         <source src="bgm.mp3" type="audio/mpeg">
     </audio>
     
-    <!-- 우측 하단 BGM 재생/일시정지 버튼 -->
-    <div id="bgmBtn" class="bgm-btn" onclick="toggleBgm()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-        </svg>
+    <!-- 우측 하단 BGM 재생/일시정지 버튼 (캔버스 기준 우측 정렬) -->
+    <div class="bgm-btn-wrap">
+        <div id="bgmBtn" class="bgm-btn" onclick="toggleBgm()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+        </div>
     </div>
 
     <!-- 스크립트 영역 -->
@@ -534,6 +546,23 @@
             }
         });
 
+        // 사용자 상호작용 시 배경음악 자동 재생 (브라우저 정책 우회)
+        function enableAutoplay() {
+            if (!isPlaying) {
+                var playPromise = bgm.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isPlaying = true;
+                        bgmBtn.classList.add('playing');
+                    }).catch(e => { console.log("자동재생 대기중..."); });
+                }
+            }
+            // 한 번 실행 후 이벤트 리스너 해제 (중복 실행 방지)
+            document.removeEventListener('click', enableAutoplay);
+            document.removeEventListener('touchstart', enableAutoplay);
+            document.removeEventListener('scroll', enableAutoplay);
+        }
+
         // --- 커스텀 토스트 알림창 띄우기 함수 (기본 alert 대체) ---
         function showToast(message) {
             const toast = document.getElementById("toast");
@@ -599,6 +628,11 @@
         document.addEventListener("DOMContentLoaded", function() {
             // 갤러리 동적 생성 및 초기화
             initGallery();
+            
+            // 음악 자동재생 이벤트 등록 (사용자가 화면을 터치/클릭/스크롤 시 즉시 재생)
+            document.addEventListener('click', enableAutoplay);
+            document.addEventListener('touchstart', enableAutoplay);
+            document.addEventListener('scroll', enableAutoplay);
             
             // 디데이 타이머
             setInterval(function() {
